@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zzd.boot.mapper.EmpMapper" >
+
+    <resultMap id="empMap" type="com.zzd.boot.pojo.EmpInfo">
+        <id property="empId" column="empId"></id>
+        <result property="empName" column="empName"></result>
+        <result property="age" column="age"></result>
+        <result property="sex" column="sex"></result>
+        <result property="phone" column="phone"></result>
+        <association property="dept" javaType="com.zzd.boot.pojo.DeptInfo">
+            <id property="deptId" column="deptId"></id>
+            <result property="deptName" column="deptName"></result>
+        </association>
+    </resultMap>
+
+
+    <select id="findAll" resultMap="empMap">
+        select e.*,d.deptName from emp e,dept d where e.deptId=d.deptId
+    </select>
+
+    <select id="allDept" resultType="com.zzd.boot.pojo.DeptInfo">
+        select * from dept
+    </select>
+
+    <insert id="saveEmp" parameterType="com.zzd.boot.pojo.EmpInfo">
+        insert into emp(empName,age,sex,phone,deptId) values(#{empName},#{age},#{sex},#{phone},#{dept.deptId})
+    </insert>
+
+    <update id="editEmp" parameterType="com.zzd.boot.pojo.EmpInfo">
+        update emp set empName=#{empName},age=#{age},sex=#{sex},phone=#{phone},deptId=#{dept.deptId} where empId=#{empId}
+    </update>
+
+    <select id="getEmpById" resultMap="empMap">
+        select * from emp e,dept d where e.deptId=d.deptId and empId=#{empId}
+    </select>
+
+    <delete id="delEmpById">
+        delete from emp where empId=#{empId}
+    </delete>
+</mapper>
